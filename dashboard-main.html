@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elysian Investments - Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        p {
+            font-size: 18px;
+        }
+        .section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .logout-btn, .action-btn {
+            background: #ff4081;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        .logout-btn:hover, .action-btn:hover {
+            background: #e91e63;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello, <span id="userName">User</span> 👋</h1>
+        <p>Slogan: "Where Elites Meet To Grow Their Financial Pockets"</p>
+
+        <div class="section">
+            <h2>Portfolio Overview</h2>
+            <p>Total Investment: <strong id="totalInvestment">KES 0.00</strong></p>
+            <p>Current Balance: <strong id="currentBalance">KES 0.00</strong></p>
+        </div>
+
+        <div class="section">
+            <h2>Active Investments</h2>
+            <p id="activeInvestments">No active investments</p>
+        </div>
+
+        <div class="section">
+            <h2>Recent Transactions</h2>
+            <p id="recentTransactions">No recent transactions</p>
+        </div>
+
+        <div class="section">
+            <h2>Market Trends</h2>
+            <p id="marketTrends">Live updates on stocks, crypto, and assets...</p>
+        </div>
+
+        <div class="section">
+            <h2>Quick Actions</h2>
+            <button class="action-btn" onclick="deposit()">Deposit</button>
+            <button class="action-btn" onclick="withdraw()">Withdraw</button>
+            <button class="action-btn">Invest Now</button>
+        </div>
+
+        <div class="section">
+            <h2>Support & Settings</h2>
+            <p>Manage your account settings and get support.</p>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userName = localStorage.getItem("userFirstName") || "User";
+            document.getElementById("userName").textContent = userName;
+            
+            let balance = localStorage.getItem("userBalance") || 0;
+            document.getElementById("currentBalance").textContent = `KES ${parseFloat(balance).toFixed(2)}`;
+        });
+
+        function deposit() {
+            let amount = prompt("Enter deposit amount (KES):");
+            if (amount && !isNaN(amount) && amount > 0) {
+                let balance = parseFloat(localStorage.getItem("userBalance")) || 0;
+                balance += parseFloat(amount);
+                localStorage.setItem("userBalance", balance);
+                document.getElementById("currentBalance").textContent = `KES ${balance.toFixed(2)}`;
+            } else {
+                alert("Invalid amount");
+            }
+        }
+
+        function withdraw() {
+            let amount = prompt("Enter withdrawal amount (KES):");
+            if (amount && !isNaN(amount) && amount > 0) {
+                let balance = parseFloat(localStorage.getItem("userBalance")) || 0;
+                if (amount > balance) {
+                    alert("Insufficient balance");
+                } else {
+                    balance -= parseFloat(amount);
+                    localStorage.setItem("userBalance", balance);
+                    document.getElementById("currentBalance").textContent = `KES ${balance.toFixed(2)}`;
+                }
+            } else {
+                alert("Invalid amount");
+            }
+        }
+
+        function logout() {
+            alert("Logging out...");
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
