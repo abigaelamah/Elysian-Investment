@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elysian Investments</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: linear-gradient(to right, #1E3A8A, #9333EA, #E91E63); color: white; }
+        .container { max-width: 400px; margin: auto; padding: 20px; background: rgba(255, 255, 255, 0.2); border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
+        .hidden { display: none; }
+        input { width: 90%; padding: 10px; margin: 5px 0; border: none; border-radius: 5px; }
+        button { background-color: #E91E63; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 5px; }
+        button:hover { background-color: #C2185B; }
+        .password-container { position: relative; display: inline-block; width: 100%; }
+        .toggle-password { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: black; }
+    </style>
+</head>
+<body>
+    <div id="login" class="container">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email (e.g., example@gmail.com)" required><br>
+        <div class="password-container">
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <span class="toggle-password" onclick="togglePassword('loginPassword')">👁️</span>
+        </div><br>
+        <button onclick="login()">Login</button>
+        <p><a href="#" onclick="showForgotPassword()">Forgot Password?</a></p>
+        <p>Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a></p>
+    </div>
+
+    <div id="signup" class="container hidden">
+        <h2>Sign Up</h2>
+        <input type="text" id="firstName" placeholder="First Name" required><br>
+        <input type="text" id="lastName" placeholder="Last Name" required><br>
+        <input type="email" id="signupEmail" placeholder="Email (e.g., example@gmail.com)" required><br>
+        <input type="tel" id="phone" placeholder="Phone Number (e.g., +254712345678)" required><br>
+        <div class="password-container">
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <span class="toggle-password" onclick="togglePassword('signupPassword')">👁️</span>
+        </div><br>
+        <div class="password-container">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            <span class="toggle-password" onclick="togglePassword('confirmPassword')">👁️</span>
+        </div><br>
+        <button onclick="signup()">Sign Up</button>
+        <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+    </div>
+
+    <script>
+        function togglePassword(fieldId) {
+            var field = document.getElementById(fieldId);
+            field.type = field.type === "password" ? "text" : "password";
+        }
+
+        function validateEmail(email) {
+            return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
+        }
+
+        function validatePhone(phone) {
+            return /^\+254\d{9}$/.test(phone);
+        }
+
+        function showSignup() {
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('signup').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('signup').classList.add('hidden');
+            document.getElementById('login').classList.remove('hidden');
+        }
+
+        function signup() {
+            let email = document.getElementById('signupEmail').value;
+            let phone = document.getElementById('phone').value;
+            let password = document.getElementById('signupPassword').value;
+            let confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!validateEmail(email) || !validatePhone(phone) || password !== confirmPassword) {
+                alert('Invalid input. Ensure email, phone, and passwords match.');
+                return;
+            }
+            localStorage.setItem(email, JSON.stringify({ phone, password }));
+            showLogin();
+        }
+
+        function login() {
+            let email = document.getElementById('loginEmail').value;
+            let password = document.getElementById('loginPassword').value;
+            let userData = localStorage.getItem(email);
+            
+            if (!userData || JSON.parse(userData).password !== password) {
+                alert('Invalid credentials');
+                return;
+            }
+            window.location.href = "investment.html";
+        }
+    </script>
+</body>
+</html>
