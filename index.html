@@ -6,7 +6,7 @@
     <title>Elysian Investments</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
-
+        
         body {
             font-family: 'Nunito', sans-serif;
             text-align: center;
@@ -16,7 +16,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
         }
         .container {
             width: 350px;
@@ -34,3 +33,124 @@
             font-size: 16px;
         }
         input {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        button {
+            background: #ff4081;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #e91e63;
+        }
+        a {
+            color: #ffeb3b;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="login" class="container">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email" required><br>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <input type="checkbox" onclick="togglePassword('loginPassword')"> Show Password<br>
+        <button onclick="login()">Login</button>
+        <p><a href="#" onclick="showForgotPassword()">Forgot Password?</a></p>
+        <p>Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a></p>
+    </div>
+
+    <div id="signup" class="container hidden">
+        <h2>Sign Up</h2>
+        <input type="text" id="firstName" placeholder="First Name" required><br>
+        <input type="text" id="lastName" placeholder="Last Name" required><br>
+        <input type="email" id="signupEmail" placeholder="Email (must be @gmail.com)" required><br>
+        <input type="text" id="phoneNumber" placeholder="Phone Number (+CountryCode)" required><br>
+        <input type="password" id="signupPassword" placeholder="Password" required>
+        <input type="checkbox" onclick="togglePassword('signupPassword')"> Show Password<br>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        <input type="checkbox" onclick="togglePassword('confirmPassword')"> Show Password<br>
+        <button onclick="signup()">Sign Up</button>
+        <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+    </div>
+
+    <script>
+        function signup() {
+            let firstName = document.getElementById('firstName').value;
+            let lastName = document.getElementById('lastName').value;
+            let email = document.getElementById('signupEmail').value;
+            let phone = document.getElementById('phoneNumber').value;
+            let password = document.getElementById('signupPassword').value;
+            let confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!email.endsWith("@gmail.com")) {
+                alert("Email must be a Gmail address (@gmail.com)");
+                return;
+            }
+            
+            if (!phone.startsWith("+")) {
+                alert("Phone number must start with the country code (e.g., +254XXXXXXXXX)");
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+            
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            if (users.find(user => user.email === email)) {
+                alert("Email already registered!");
+                return;
+            }
+
+            users.push({ firstName, lastName, email, phone, password });
+            localStorage.setItem('users', JSON.stringify(users));
+            alert("Signup successful! Redirecting to login page.");
+            document.getElementById('signup').classList.add('hidden');
+            document.getElementById('login').classList.remove('hidden');
+        }
+
+        function login() {
+            let email = document.getElementById('loginEmail').value;
+            let password = document.getElementById('loginPassword').value;
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let user = users.find(user => user.email === email && user.password === password);
+            
+            if (user) {
+                alert("Login successful! Redirecting to dashboard.");
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Invalid email or password!");
+            }
+        }
+
+        function togglePassword(fieldId) {
+            let field = document.getElementById(fieldId);
+            field.type = field.type === "password" ? "text" : "password";
+        }
+
+        function showSignup() {
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('signup').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('signup').classList.add('hidden');
+            document.getElementById('login').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
