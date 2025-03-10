@@ -154,18 +154,3 @@
     </script>
 </body>
 </html>
-function login() {
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
-    
-    const storedEmail = localStorage.getItem("userEmail");
-    const storedPassword = localStorage.getItem("userPassword");
-
-    if (email === storedEmail && password === storedPassword) {
-        alert("Login successful!");
-        window.location.href = "dashboard.html"; // Redirect to dashboard
-    } else {
-        alert("Invalid email or password.");
-    }
-}
-<button onclick="login()">Login</button>
