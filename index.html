@@ -118,13 +118,38 @@
 
             users.push({ firstName, lastName, email, phone, password });
             localStorage.setItem('users', JSON.stringify(users));
-            alert("Signup successful! Please login.");
-            showLogin();
+            alert("Signup successful! Redirecting to login page.");
+            document.getElementById('signup').classList.add('hidden');
+            document.getElementById('login').classList.remove('hidden');
+        }
+
+        function login() {
+            let email = document.getElementById('loginEmail').value;
+            let password = document.getElementById('loginPassword').value;
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let user = users.find(user => user.email === email && user.password === password);
+            
+            if (user) {
+                alert("Login successful! Redirecting to dashboard.");
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Invalid email or password!");
+            }
         }
 
         function togglePassword(fieldId) {
             let field = document.getElementById(fieldId);
             field.type = field.type === "password" ? "text" : "password";
+        }
+
+        function showSignup() {
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('signup').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('signup').classList.add('hidden');
+            document.getElementById('login').classList.remove('hidden');
         }
     </script>
 </body>
